@@ -1,1 +1,1 @@
-import "./components/template-script-component"
+// import "./components/template-script-component"

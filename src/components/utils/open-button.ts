@@ -15,6 +15,7 @@ class OpenButton extends ScriptTypeBase {
     'https://playcanvas.com/project/1032835/overview/typescript-template';
 
   public initialize() {
+    console.log(this.link)
     this.entity.button?.on('click', () => {
       window.open(this.link);
     });

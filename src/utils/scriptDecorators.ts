@@ -69,7 +69,8 @@ export function createScript(name: string) {
         (attrKey) =>
           attrKey !== 'atts' &&
           attrKey !== '_callbacks' &&
-          attrKey !== '_callbackActive'
+          attrKey !== '_callbackActive' &&
+          !instance.atts[attrKey]
       );
 
       for (const attrKey of cloneAttr) {
