@@ -29,7 +29,8 @@ function generateBayerMatrix(order: number) {
 }
 
 function generateDitherTexture(size: number) {
-  const order = Math.log2(size);
+  const order = Math.floor(Math.log2(size));
+  size = Math.pow(2, order);
   const bayerMatrix = generateBayerMatrix(order);
   // TODO: use single channel texture
   const ditherData = new Uint8Array(3 * size * size);
@@ -94,8 +95,6 @@ export class DitherTransparency extends pc.ScriptType {
       return;
     }
 
-    this.ditherTexture = generateDitherTexture(this.ditherSize);
-
     this.on('attr:transparency', (value: number) => {
         this.entity.render!.meshInstances.forEach((meshInstance) => {
             meshInstance.setParameter('uAlpha', this.transparency);
@@ -107,6 +106,10 @@ export class DitherTransparency extends pc.ScriptType {
 
       this.entity.render!.meshInstances.forEach((meshInstance) => {
         meshInstance.setParameter('uDitherTexture', this.ditherTexture);
+        meshInstance.setParameter('uDitherResolution', [
+            this.ditherTexture.width,
+            this.ditherTexture.height,
+        ]);
       });
     });
 
@@ -117,6 +120,8 @@ export class DitherTransparency extends pc.ScriptType {
         resolve();
       }
     });
+
+    this.ditherTexture = generateDitherTexture(this.ditherSize);
 
     const meshInstances = this.entity.render!.meshInstances;
     for (let i = 0; i < meshInstances.length; i++) {
@@ -138,21 +143,13 @@ export class DitherTransparency extends pc.ScriptType {
       meshInstance.setParameter('uAlpha', this.transparency);
       meshInstance.setParameter('uDitherTexture', this.ditherTexture);
       meshInstance.setParameter('uDitherResolution', [
-        this.ditherSize,
-        this.ditherSize,
+        this.ditherTexture.width,
+        this.ditherTexture.height,
       ]);
 
       material.update();
     }
   }
-
-  //   public postInitialize(): void {}
-
-  //   public update(dt: number) {}
-
-  //   public postUpdate(): void {}
-
-  //   public swap(): void {}
 }
 
 pc.registerScript(DitherTransparency, 'ditherTransparency');
