@@ -96,9 +96,9 @@ export class DitherTransparency extends pc.ScriptType {
     }
 
     this.on('attr:transparency', (value: number) => {
-        this.entity.render!.meshInstances.forEach((meshInstance) => {
-            meshInstance.setParameter('uAlpha', this.transparency);
-        });
+      this.entity.render!.meshInstances.forEach((meshInstance) => {
+        meshInstance.setParameter('uAlpha', this.transparency);
+      });
     });
 
     this.on('attr:ditherSize', (value: number) => {
@@ -107,15 +107,15 @@ export class DitherTransparency extends pc.ScriptType {
       this.entity.render!.meshInstances.forEach((meshInstance) => {
         meshInstance.setParameter('uDitherTexture', this.ditherTexture);
         meshInstance.setParameter('uDitherResolution', [
-            this.ditherTexture.width,
-            this.ditherTexture.height,
+          this.ditherTexture.width,
+          this.ditherTexture.height,
         ]);
       });
     });
 
     await new Promise<void>((resolve) => {
       if (this.entity.render?.asset instanceof pc.Asset) {
-        this.entity.render?.asset?.ready(_ => resolve());
+        this.entity.render?.asset?.ready((_) => resolve());
       } else {
         resolve();
       }
